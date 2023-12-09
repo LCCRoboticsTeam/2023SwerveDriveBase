@@ -132,8 +132,8 @@ public final class Constants {
     public static final IdleMode DRIVING_MOTOR_IDLE_MODE = IdleMode.kBrake;
     public static final IdleMode TURNING_MOTOR_IDLE_MODE = IdleMode.kBrake;
 
-    public static final int DRIVING_MOTOR_CURRENT_LIMIT = 50; // amps
-    public static final int TURNING_MOTOR_CURRENT_LIMIT = 20; // amps
+    public static final int DRIVING_MOTOR_CURRENT_LIMIT = 25; // amps (was 50)
+    public static final int TURNING_MOTOR_CURRENT_LIMIT = 10; // amps (was 20)
   }
 
   public static final class NeoMotorConstants {
