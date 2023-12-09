@@ -43,7 +43,7 @@ public class SwerveGamepadDriveCommand extends CommandBase {
   @Override
   public void execute() {
     double xSpeed = xSpeedSupplier.getAsDouble();
-    double ySpeed = ySpeedSupplier.getAsDouble();
+    double ySpeed = ySpeedSupplier.getAsDouble()*-1;
     double rotateSpeed = rotateSpeedSupplier.getAsDouble();
 
     swerveDriveTrain.drive(
