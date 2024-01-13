@@ -47,12 +47,12 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double MAX_SPEED_METERS_PER_SECOND = 4.8;
-    public static final double MAX_ANGULAR_SPEED = 2 * Math.PI; // radians per second
+    public static final double MAX_SPEED_METERS_PER_SECOND = 2;
+    public static final double MAX_ANGULAR_SPEED =  Math.PI; // radians per second
 
-    public static final double DIRECTION_SLEW_RATE = 1.2; // radians per second
-    public static final double MAGNITUDE_SLEW_RATE = 1.8; // percent per second (1 = 100%)
-    public static final double ROTATIONAL_SLEW_RATE = 2.0; // percent per second (1 = 100%)
+    public static final double DIRECTION_SLEW_RATE = 0.6; // radians per second
+    public static final double MAGNITUDE_SLEW_RATE = 0.9; // percent per second (1 = 100%)
+    public static final double ROTATIONAL_SLEW_RATE = 1; // percent per second (1 = 100%)
 
     // Chassis configuration
     public static final double TRACK_WIDTH = Units.inchesToMeters(24.5);
@@ -132,11 +132,11 @@ public final class Constants {
     public static final IdleMode DRIVING_MOTOR_IDLE_MODE = IdleMode.kBrake;
     public static final IdleMode TURNING_MOTOR_IDLE_MODE = IdleMode.kBrake;
 
-    public static final int DRIVING_MOTOR_CURRENT_LIMIT = 25; // amps (was 50)
-    public static final int TURNING_MOTOR_CURRENT_LIMIT = 10; // amps (was 20)
+    public static final int DRIVING_MOTOR_CURRENT_LIMIT = 10; // amps (was 50)
+    public static final int TURNING_MOTOR_CURRENT_LIMIT = 5; // amps (was 20)
   }
 
   public static final class NeoMotorConstants {
-    public static final double FREE_SPEED_RPM = 5676;
+    public static final double FREE_SPEED_RPM = 2838;
   }
 }

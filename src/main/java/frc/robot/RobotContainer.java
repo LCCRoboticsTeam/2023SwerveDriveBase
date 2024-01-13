@@ -48,7 +48,7 @@ public class RobotContainer {
     //   xboxController::getLeftX, xboxController::getRightX, fieldRelativeChooser::getSelected));
   
     // Test
-        driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain,xboxController::getRightY,
+        driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain,xboxController::getLeftY,
         xboxController::getLeftX, xboxController::getRightX, fieldRelativeChooser::getSelected));
 
 
