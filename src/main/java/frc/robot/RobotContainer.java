@@ -40,7 +40,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    fieldRelativeChooser.setDefaultOption("Field Relative", true);
+    fieldRelativeChooser.setDefaultOption("Field Relative",  true);
     fieldRelativeChooser.addOption("Robot Relative", false);
     SmartDashboard.putData(fieldRelativeChooser);
 
@@ -48,9 +48,8 @@ public class RobotContainer {
     //   xboxController::getLeftX, xboxController::getRightX, fieldRelativeChooser::getSelected));
   
     // Test
-        driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain,xboxController::getLeftY,
-        xboxController::getLeftX, xboxController::getRightX, fieldRelativeChooser::getSelected));
-
+    driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain,xboxController::getLeftX,
+        xboxController::getLeftY, xboxController::getRightX, fieldRelativeChooser::getSelected));
 
   }
 

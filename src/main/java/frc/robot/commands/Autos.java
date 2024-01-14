@@ -20,43 +20,43 @@ import frc.robot.subsystems.DriveTrainSubsystem;
 public class Autos {
     public static CommandBase templateAuto(DriveTrainSubsystem driveTrain) {
         // Create config for trajectory
-        // TrajectoryConfig config = new TrajectoryConfig(
-        //     AutoConstants.MAX_SPEED_METERS_PER_SECOND,
-            // AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
-        //     // Add kinematics to ensure max speed is actually obeyed
-        //     .setKinematics(DriveConstants.DRIVE_KINEMATICS);
+        TrajectoryConfig config = new TrajectoryConfig(
+            AutoConstants.MAX_SPEED_METERS_PER_SECOND,
+            AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(DriveConstants.DRIVE_KINEMATICS);
 
-        // // An example trajectory to follow. All units in meters.
-        // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        //     // Start at the origin facing the +X direction
-        //     new Pose2d(0, 0, new Rotation2d(0)),
-        //     // Pass through these two interior waypoints, making an 's' curve path
-        //     List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        //     // End 3 meters straight ahead of where we started, facing forward
-        //     new Pose2d(3, 0, new Rotation2d(0)),
-        //     config);
+        // An example trajectory to follow. All units in meters.
+        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+            // Start at the origin facing the +X direction
+            new Pose2d(0, 0, new Rotation2d(0)),
+            // Pass through these two interior waypoints, making an 's' curve path
+            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            // End 3 meters straight ahead of where we started, facing forward
+            new Pose2d(3, 0, new Rotation2d(0)),
+            config);
 
-        // var thetaController = new ProfiledPIDController(
-        //     AutoConstants.P_THETA_CONTROLLER, 0, 0, AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
-        // thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        var thetaController = new ProfiledPIDController(
+            AutoConstants.P_THETA_CONTROLLER, 0, 0, AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        // SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        //     exampleTrajectory,
-        //     driveTrain::getPose, // Functional interface to feed supplier
-        //     DriveConstants.DRIVE_KINEMATICS,
+        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+            exampleTrajectory,
+            driveTrain::getPose, // Functional interface to feed supplier
+            DriveConstants.DRIVE_KINEMATICS,
+            // Position controllers
+            new PIDController(AutoConstants.P_X_CONTROLLER, 0, 0),
+            new PIDController(AutoConstants.P_Y_CONTROLLER, 0, 0),
+            thetaController,
+            driveTrain::setModuleStates,
+            driveTrain);
 
-        //     // Position controllers
-        //     new PIDController(AutoConstants.P_X_CONTROLLER, 0, 0),
-        //     new PIDController(AutoConstants.P_Y_CONTROLLER, 0, 0),
-        //     thetaController,
-        //     driveTrain::setModuleStates,
-        //     driveTrain);
+        // Reset odometry to the starting pose of the trajectory.
+        driveTrain.resetOdometry(exampleTrajectory.getInitialPose());
 
-        // // Reset odometry to the starting pose of the trajectory.
-        // driveTrain.resetOdometry(exampleTrajectory.getInitialPose());
-
-        // // Run path following command, then stop at the end.
+        // Run path following command, then stop at the end.
         // return swerveControllerCommand.andThen(() -> driveTrain.drive(0, 0, 0, false, false));
+        
         return driveTrain.runOnce(() -> {});
     }
 }

@@ -41,7 +41,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
       DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET);
 
   // The gyro sensor
-  // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -53,15 +53,15 @@ public class DriveTrainSubsystem extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   // Odometry class for tracking robot pose
-  // SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
-  //     DriveConstants.DRIVE_KINEMATICS,
-  //     Rotation2d.fromDegrees(m_gyro.getAngle()),
-  //     new SwerveModulePosition[] {
-  //         m_frontLeft.getPosition(),
-  //         m_frontRight.getPosition(),
-  //         m_rearLeft.getPosition(),
-  //         m_rearRight.getPosition()
-  //     });
+  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
+      DriveConstants.DRIVE_KINEMATICS,
+      Rotation2d.fromDegrees(m_gyro.getAngle()),
+      new SwerveModulePosition[] {
+          m_frontLeft.getPosition(),
+          m_frontRight.getPosition(),
+          m_rearLeft.getPosition(),
+          m_rearRight.getPosition()
+      });
 
   /** Creates a new DriveSubsystem. */
   public DriveTrainSubsystem() {
@@ -70,14 +70,14 @@ public class DriveTrainSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    // m_odometry.update(
-    //     Rotation2d.fromDegrees(m_gyro.getAngle()),
-    //     new SwerveModulePosition[] {
-    //         m_frontLeft.getPosition(),
-    //         m_frontRight.getPosition(),
-    //         m_rearLeft.getPosition(),
-    //         m_rearRight.getPosition()
-    //     });
+    m_odometry.update(
+        Rotation2d.fromDegrees(m_gyro.getAngle()),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+        });
   }
 
   /**
@@ -85,26 +85,26 @@ public class DriveTrainSubsystem extends SubsystemBase {
    *
    * @return The pose.
    */
-  // public Pose2d getPose() {
-  //   return m_odometry.getPoseMeters();
-  // }
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
+  }
 
   /**
    * Resets the odometry to the specified pose.
    *
    * @param pose The pose to which to set the odometry.
    */
-  // public void resetOdometry(Pose2d pose) {
-  //   m_odometry.resetPosition(
-  //       Rotation2d.fromDegrees(m_gyro.getAngle()),
-  //       new SwerveModulePosition[] {
-  //           m_frontLeft.getPosition(),
-  //           m_frontRight.getPosition(),
-  //           m_rearLeft.getPosition(),
-  //           m_rearRight.getPosition()
-  //       },
-  //       pose);
-  // }
+  public void resetOdometry(Pose2d pose) {
+    m_odometry.resetPosition(
+        Rotation2d.fromDegrees(m_gyro.getAngle()),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+        },
+        pose);
+  }
 
   /**
    * Method to drive the robot using joystick info.
@@ -220,25 +220,25 @@ public class DriveTrainSubsystem extends SubsystemBase {
   }
 
   /** Zeroes the heading of the robot. */
-  // public void zeroHeading() {
-  //   m_gyro.reset();
-  // }
+  public void zeroHeading() {
+    m_gyro.reset();
+  }
 
   /**
    * Returns the heading of the robot.
    *
    * @return the robot's heading in degrees, from -180 to 180
    */
-  // public double getHeading() {
-  //   return Rotation2d.fromDegrees(m_gyro.getAngle()).getDegrees();
-  // }
+  public double getHeading() {
+    return Rotation2d.fromDegrees(m_gyro.getAngle()).getDegrees();
+  }
 
   /**
    * Returns the turn rate of the robot.
    *
    * @return The turn rate of the robot, in degrees per second
    */
-  // public double getTurnRate() {
-  //   return m_gyro.getRate() * (DriveConstants.GYRO_REVERSED ? -1.0 : 1.0);
-  // }
+  public double getTurnRate() {
+    return m_gyro.getRate() * (DriveConstants.GYRO_REVERSED ? -1.0 : 1.0);
+  }
 }
