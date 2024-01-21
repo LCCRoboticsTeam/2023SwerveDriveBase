@@ -7,13 +7,16 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.SwerveGamepadDriveCommand;
+import frc.robot.commands.intakesubsystemCommand;
 import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.subsystems.intakesubsystem;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
+import frc.robot.Constants.DriveConstants;
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -30,6 +33,8 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController xboxController = new CommandXboxController(
       OperatorConstants.XBOX_CONTROLLER_PORT);
+
+  private final intakesubsystem inTake = new intakesubsystem(DriveConstants.INTAKE_CAN_ID, xboxController.getHID() , true);
 
   private final SendableChooser<Boolean> fieldRelativeChooser = new SendableChooser<>();
 
@@ -50,7 +55,9 @@ public class RobotContainer {
     // Test
     driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain,xboxController::getLeftX,
         xboxController::getLeftY, xboxController::getRightX, fieldRelativeChooser::getSelected));
-
+    
+    //inTake.setDefaultCommand(new intakesubsystemCommand(inTake));
+    
   }
 
   /**
@@ -69,6 +76,12 @@ public class RobotContainer {
    */
   private void configureBindings() {
     xboxController.rightBumper().whileTrue(driveTrain.run(driveTrain::setX));
+
+    //xboxController.a().whileTrue(inTake.intakeIn());    
+    //xboxController.b().whileTrue(inTake.intakeOut());
+    //xboxController.x().whileTrue(inTake.intakeOff());
+    //xboxController.y().whileTrue(inTake.intakeOff());
+    
   }
 
   /**
