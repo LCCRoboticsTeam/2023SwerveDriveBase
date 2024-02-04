@@ -7,9 +7,9 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.SwerveGamepadDriveCommand;
-import frc.robot.commands.intakesubsystemCommand;
+import frc.robot.commands.IntakeSubsystemCommand;
 import frc.robot.subsystems.DriveTrainSubsystem;
-import frc.robot.subsystems.intakesubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.IntakeConstants;
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -31,10 +32,12 @@ public class RobotContainer {
   private final DriveTrainSubsystem driveTrain = new DriveTrainSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController xboxController = new CommandXboxController(
+  private final CommandXboxController commandXboxController = new CommandXboxController(
       OperatorConstants.XBOX_CONTROLLER_PORT);
+   private final XboxController xboxController = new XboxController(
+    OperatorConstants.XBOX_CONTROLLER_PORT);
 
-  private final intakesubsystem inTake = new intakesubsystem(DriveConstants.INTAKE_CAN_ID, xboxController.getHID() , true);
+  private final IntakeSubsystem inTake = new IntakeSubsystem(DriveConstants.INTAKE_CAN_ID, IntakeConstants.INTAKE_MOTOR_SPEED,true);
 
   private final SendableChooser<Boolean> fieldRelativeChooser = new SendableChooser<>();
 
@@ -52,12 +55,11 @@ public class RobotContainer {
     //driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain, xboxController::getLeftY,
     //   xboxController::getLeftX, xboxController::getRightX, fieldRelativeChooser::getSelected));
   
-    // Test
-    driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain,xboxController::getLeftX,
-        xboxController::getLeftY, xboxController::getRightX, fieldRelativeChooser::getSelected));
+    driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain,commandXboxController::getLeftX,
+    commandXboxController::getLeftY, commandXboxController::getRightX, fieldRelativeChooser::getSelected));
     
-    //inTake.setDefaultCommand(new intakesubsystemCommand(inTake));
-    
+    //inTake.setDefaultCommand(new IntakeSubsystemCommand(inTake, xboxController.getHID(), true));
+    inTake.setDefaultCommand(new IntakeSubsystemCommand(inTake, xboxController::getAButton, xboxController::getBButton, true));
   }
 
   /**
@@ -75,12 +77,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    xboxController.rightBumper().whileTrue(driveTrain.run(driveTrain::setX));
+    commandXboxController.rightBumper().whileTrue(driveTrain.run(driveTrain::setX));
 
-    //xboxController.a().whileTrue(inTake.intakeIn());    
-    //xboxController.b().whileTrue(inTake.intakeOut());
-    //xboxController.x().whileTrue(inTake.intakeOff());
-    //xboxController.y().whileTrue(inTake.intakeOff());
     
   }
 

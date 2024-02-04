@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 import java.util.function.DoubleSupplier;
 
@@ -14,46 +14,45 @@ import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class IntakeSubsystemCommand extends CommandBase {
+public class ShooterSubsystemCommand extends CommandBase {
 
-  private final IntakeSubsystem IntakeSubsystem;
+  private final ShooterSubsystem ShooterSubsystem;
   //private final XboxController xboxController;
-  private final BooleanSupplier InTakeIn;
-  private final BooleanSupplier InTakeOut;
+  private final BooleanSupplier ShooterIn;
+  private final BooleanSupplier ShooterOut;
   
   /** Creates a new SwerveControllerDrive. */
-  public IntakeSubsystemCommand(IntakeSubsystem IntakeSubsystem, BooleanSupplier InTakeIn, BooleanSupplier InTakeOut, boolean printDebugInput) {
-    this.IntakeSubsystem = IntakeSubsystem;
-    //this.xboxController = xboxController;
-    this.InTakeIn = InTakeIn;
-    this.InTakeOut = InTakeOut;
+  public ShooterSubsystemCommand(ShooterSubsystem ShooterSubsystem, BooleanSupplier ShooterIn, BooleanSupplier ShooterOut, boolean printDebugInput) {
+    this.ShooterSubsystem = ShooterSubsystem;
+    this.ShooterIn = ShooterIn;
+    this.ShooterOut = ShooterOut;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(this.IntakeSubsystem);
+    addRequirements(this.ShooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    IntakeSubsystem.intakeOff(); 
+    ShooterSubsystem.ShooterOff(); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
   
-    if (InTakeIn.getAsBoolean()){
-      IntakeSubsystem.intakeIn();
-    } else if (InTakeOut.getAsBoolean()) {
-      IntakeSubsystem.intakeOut();
+    if (ShooterIn.getAsBoolean()){
+      ShooterSubsystem.ShooterIn();
+    } else if (ShooterOut.getAsBoolean()) {
+      ShooterSubsystem.ShooterOut();
     } else {
-      IntakeSubsystem.intakeOff(); 
+      ShooterSubsystem.ShooterOff(); 
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    IntakeSubsystem.intakeOff();
+    ShooterSubsystem.ShooterOff();
   }
 
   // Returns true when the command should end.

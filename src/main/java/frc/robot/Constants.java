@@ -44,6 +44,10 @@ public final class Constants {
         MAX_ANGULAR_SPEED_RADIANS_PER_SECOND, MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED);
   }
 
+public static final class IntakeConstants {
+  public static final double INTAKE_MOTOR_SPEED = 0.1;
+}
+
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
