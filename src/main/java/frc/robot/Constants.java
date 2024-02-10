@@ -48,6 +48,10 @@ public static final class IntakeConstants {
   public static final double INTAKE_MOTOR_SPEED = 0.1;
 }
 
+public static final class ArmConstants {
+  public static final double ARM_MOTOR_SPEED = 0.1; // idk if this is a good right speed
+}
+
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -87,6 +91,10 @@ public static final class IntakeConstants {
     public static final int REAR_RIGHT_TURNING_CAN_ID = 15;
 
     public static final int INTAKE_CAN_ID = 4;
+
+    public static final int ARM_MOTOR_LEFT_CAN_ID = 0; //**we dont know the ID because we dont have the motor */
+    public static final int ARM_MOTOR_RIGHT_CAN_ID = 0; //**we dont know the ID because we dont have the motor */
+
     public static final boolean GYRO_REVERSED = false;
   }
 

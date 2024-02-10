@@ -5,9 +5,11 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ArmSubsystemCommand;
 import frc.robot.commands.Autos;
 import frc.robot.commands.SwerveGamepadDriveCommand;
 import frc.robot.commands.IntakeSubsystemCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
@@ -16,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IntakeConstants;
 /**
@@ -38,6 +41,7 @@ public class RobotContainer {
     OperatorConstants.XBOX_CONTROLLER_PORT);
 
   private final IntakeSubsystem inTake = new IntakeSubsystem(DriveConstants.INTAKE_CAN_ID, IntakeConstants.INTAKE_MOTOR_SPEED,true);
+  private final ArmSubsystem Arm = new ArmSubsystem(DriveConstants.ARM_MOTOR_LEFT_CAN_ID, DriveConstants.ARM_MOTOR_RIGHT_CAN_ID, ArmConstants.ARM_MOTOR_SPEED, true);
 
   private final SendableChooser<Boolean> fieldRelativeChooser = new SendableChooser<>();
 
@@ -60,6 +64,8 @@ public class RobotContainer {
     
     //inTake.setDefaultCommand(new IntakeSubsystemCommand(inTake, xboxController.getHID(), true));
     inTake.setDefaultCommand(new IntakeSubsystemCommand(inTake, xboxController::getAButton, xboxController::getBButton, true));
+
+    Arm.setDefaultCommand(new ArmSubsystemCommand(Arm, xboxController::getXButton, xboxController::getYButton, true));
   }
 
   /**

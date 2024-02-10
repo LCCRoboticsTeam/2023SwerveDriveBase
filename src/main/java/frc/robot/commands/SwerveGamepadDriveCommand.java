@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.DriveTrainSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 public class SwerveGamepadDriveCommand extends CommandBase {
 
@@ -37,11 +39,14 @@ public class SwerveGamepadDriveCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    swerveDriveTrain.zeroHeading();
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    SmartDashboard.putNumber("Gyro value", swerveDriveTrain.getHeading());
     double xSpeed = xSpeedSupplier.getAsDouble();
     double ySpeed = ySpeedSupplier.getAsDouble();
     double rotateSpeed = rotateSpeedSupplier.getAsDouble();
