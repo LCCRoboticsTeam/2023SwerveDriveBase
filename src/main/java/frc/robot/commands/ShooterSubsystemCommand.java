@@ -41,7 +41,8 @@ public class ShooterSubsystemCommand extends CommandBase {
   public void execute() {
   
     if (ShooterIn.getAsBoolean()){
-      ShooterSubsystem.ShooterIn();
+      // Disable for now
+      //ShooterSubsystem.ShooterIn();
     } else if (ShooterOut.getAsBoolean()) {
       ShooterSubsystem.ShooterOut();
     } else {

@@ -5,13 +5,16 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ArmSubsystemCommand;
 import frc.robot.commands.Autos;
 import frc.robot.commands.SwerveGamepadDriveCommand;
 import frc.robot.commands.IntakeSubsystemCommand;
+import frc.robot.commands.ShooterSubsystemCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,8 +34,6 @@ import frc.robot.Constants.IntakeConstants;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final DriveTrainSubsystem driveTrain = new DriveTrainSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController commandXboxController = new CommandXboxController(
@@ -40,8 +41,11 @@ public class RobotContainer {
    private final XboxController xboxController = new XboxController(
     OperatorConstants.XBOX_CONTROLLER_PORT);
 
-  private final IntakeSubsystem inTake = new IntakeSubsystem(DriveConstants.INTAKE_CAN_ID, IntakeConstants.INTAKE_MOTOR_SPEED,true);
-  private final ArmSubsystem Arm = new ArmSubsystem(DriveConstants.ARM_MOTOR_LEFT_CAN_ID, DriveConstants.ARM_MOTOR_RIGHT_CAN_ID, ArmConstants.ARM_MOTOR_SPEED, true);
+  // The robot's subsystems and commands are defined here...
+  private final DriveTrainSubsystem driveTrain = new DriveTrainSubsystem();
+  private final IntakeSubsystem inTake = new IntakeSubsystem(IntakeConstants.INTAKE_CAN_ID, IntakeConstants.INTAKE_MOTOR_SPEED,false);
+  private final ArmSubsystem Arm = new ArmSubsystem(ArmConstants.ARM_MOTOR_LEFT_CAN_ID, ArmConstants.ARM_MOTOR_RIGHT_CAN_ID, ArmConstants.ARM_MOTOR_SPEED, false);
+  private final ShooterSubsystem Shooter = new ShooterSubsystem(ShooterConstants.SHOOTER_MOTOR_LEFT_CAN_ID, ShooterConstants.SHOOTER_MOTOR_RIGHT_CAN_ID, ShooterConstants.SHOOTER_MOTOR_SPEED, false);
 
   private final SendableChooser<Boolean> fieldRelativeChooser = new SendableChooser<>();
 
@@ -62,10 +66,10 @@ public class RobotContainer {
     //driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain,commandXboxController::getLeftX,
     //commandXboxController::getLeftY, commandXboxController::getRightX, fieldRelativeChooser::getSelected));
     
-    //inTake.setDefaultCommand(new IntakeSubsystemCommand(inTake, xboxController.get(), true));
-    inTake.setDefaultCommand(new IntakeSubsystemCommand(inTake, xboxController::getAButton, xboxController::getBButton, true));
-
-    Arm.setDefaultCommand(new ArmSubsystemCommand(Arm, xboxController::getXButton, xboxController::getYButton, true));
+    inTake.setDefaultCommand(new IntakeSubsystemCommand(inTake, xboxController::getAButton, xboxController::getBButton, false));
+    // FIXME: Can assign to xbox trigger??
+    Shooter.setDefaultCommand(new ShooterSubsystemCommand(Shooter, xboxController::getAButton, xboxController::getBButton, false));
+    Arm.setDefaultCommand(new ArmSubsystemCommand(Arm, xboxController::getXButton, xboxController::getYButton, false));
   }
 
   /**

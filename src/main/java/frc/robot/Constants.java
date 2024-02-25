@@ -47,13 +47,28 @@ public final class Constants {
 
 public static final class IntakeConstants {
   public static final double INTAKE_MOTOR_SPEED = 0.3;
+  public static final int INTAKE_CAN_ID = 4;
+}
+
+public static final class ShooterConstants {
+  public static final double SHOOTER_MOTOR_SPEED = 0.3;
+  public static final int SHOOTER_MOTOR_LEFT_CAN_ID = 5; 
+  public static final int SHOOTER_MOTOR_RIGHT_CAN_ID = 9; 
 }
 
 public static final class ArmConstants {
   public static final double ARM_MOTOR_SPEED = 0.4;
-  public static final int ARM_INTAKE_BORE_ENCODER_POSITION = 900;
-  public static final int ARM_SHOOTER_BORE_ENCODER_POSITION = 200;
+  public static final int ARM_MOTOR_LEFT_CAN_ID = 7; 
+  public static final int ARM_MOTOR_RIGHT_CAN_ID = 6; 
   public static final int ARM_UPRIGHT_BORE_ENCODER_POSITION = 1;
+  public static final int ARM_SPEAKER_SHOOTER_BORE_ENCODER_POSITION = 200;
+  public static final int ARM_AMP_SHOOTER_BORE_ENCODER_POSITION = 200;
+  public static final int ARM_HANG_BORE_ENCODER_POSITION = 400;
+  public static final int ARM_INTAKE_BORE_ENCODER_POSITION = 900;
+}
+
+public enum ArmPosition {
+  UNKNOWN, UPRIGHT, INTAKE, SPEAKER_SHOOTER, AMP_SHOOTER, HANG
 }
 
   public static final class DriveConstants {
@@ -93,14 +108,6 @@ public static final class ArmConstants {
     public static final int REAR_LEFT_TURNING_CAN_ID = 14;
     public static final int FRONT_RIGHT_TURNING_CAN_ID = 16;
     public static final int REAR_RIGHT_TURNING_CAN_ID = 18;
-
-    public static final int INTAKE_CAN_ID = 4;
-
-    public static final int SHOOTER_MOTOR_LEFT_CAN_ID = 5; 
-    public static final int SHOOTER_MOTOR_RIGHT_CAN_ID = 9; 
-
-    public static final int ARM_MOTOR_LEFT_CAN_ID = 7; 
-    public static final int ARM_MOTOR_RIGHT_CAN_ID = 6; 
 
     public static final boolean GYRO_REVERSED = false;
   }

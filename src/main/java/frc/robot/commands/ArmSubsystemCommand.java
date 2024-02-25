@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 
+import frc.robot.Constants.ArmPosition;
 import frc.robot.subsystems.ArmSubsystem;
 
 import java.util.function.DoubleSupplier;
@@ -17,14 +18,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ArmSubsystemCommand extends CommandBase {
 
   private final ArmSubsystem ArmSubsystem;
-  private final BooleanSupplier IntakePosition;
-  private final BooleanSupplier ShooterPosition;
+  private final BooleanSupplier IntakeAndSpeakerPosition;
+  private final BooleanSupplier AmpShooterPosition;
   
-  /** Creates a new SwerveControllerDrive. */
-  public ArmSubsystemCommand(ArmSubsystem ArmSubsystem, BooleanSupplier IntakePosition, BooleanSupplier ShooterPosition, boolean printDebugInput) {
+  public ArmSubsystemCommand(ArmSubsystem ArmSubsystem, BooleanSupplier IntakeAndSpeakerPosition, BooleanSupplier AmpShooterPosition, boolean printDebugInput) {
     this.ArmSubsystem = ArmSubsystem;
-    this.IntakePosition = IntakePosition;
-    this.ShooterPosition = ShooterPosition;
+    this.IntakeAndSpeakerPosition = IntakeAndSpeakerPosition;
+    this.AmpShooterPosition = AmpShooterPosition;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.ArmSubsystem);
   }
@@ -39,10 +39,14 @@ public class ArmSubsystemCommand extends CommandBase {
   @Override
   public void execute() {
   
-    if (IntakePosition.getAsBoolean()){
-      ArmSubsystem.IntakePosition();
-    } else if (ShooterPosition.getAsBoolean()) {
-      ArmSubsystem.ShooterPosition();
+    if (IntakeAndSpeakerPosition.getAsBoolean()){
+      if (ArmSubsystem.armPosition != ArmPosition.INTAKE){
+          ArmSubsystem.IntakePosition();
+      } else {
+        ArmSubsystem.SpeakerShooterPosition();
+      }
+    } else if (AmpShooterPosition.getAsBoolean()) {
+      ArmSubsystem.AmpShooterPosition();
     } else {
     //  ArmSubsystem.UprightPosition(false); 
     }

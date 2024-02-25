@@ -21,7 +21,6 @@ public class IntakeSubsystemCommand extends CommandBase {
   private final BooleanSupplier InTakeIn;
   private final BooleanSupplier InTakeOut;
   
-  /** Creates a new SwerveControllerDrive. */
   public IntakeSubsystemCommand(IntakeSubsystem IntakeSubsystem, BooleanSupplier InTakeIn, BooleanSupplier InTakeOut, boolean printDebugInput) {
     this.IntakeSubsystem = IntakeSubsystem;
     //this.xboxController = xboxController;
@@ -44,7 +43,8 @@ public class IntakeSubsystemCommand extends CommandBase {
     if (InTakeIn.getAsBoolean()){
       IntakeSubsystem.intakeIn();
     } else if (InTakeOut.getAsBoolean()) {
-      IntakeSubsystem.intakeOut();
+      // FIXME: Disable for now
+      //IntakeSubsystem.intakeOut();
     } else {
       IntakeSubsystem.intakeOff(); 
     }
