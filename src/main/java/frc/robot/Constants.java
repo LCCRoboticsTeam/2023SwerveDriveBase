@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.fasterxml.jackson.databind.type.PlaceholderForType;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -45,11 +46,14 @@ public final class Constants {
   }
 
 public static final class IntakeConstants {
-  public static final double INTAKE_MOTOR_SPEED = 0.1;
+  public static final double INTAKE_MOTOR_SPEED = 0.3;
 }
 
 public static final class ArmConstants {
-  public static final double ARM_MOTOR_SPEED = 0.1; // idk if this is a good right speed
+  public static final double ARM_MOTOR_SPEED = 0.4;
+  public static final int ARM_INTAKE_BORE_ENCODER_POSITION = 900;
+  public static final int ARM_SHOOTER_BORE_ENCODER_POSITION = 200;
+  public static final int ARM_UPRIGHT_BORE_ENCODER_POSITION = 1;
 }
 
   public static final class DriveConstants {
@@ -63,9 +67,9 @@ public static final class ArmConstants {
     public static final double ROTATIONAL_SLEW_RATE = 1; // percent per second (1 = 100%)
 
     // Chassis configuration
-    public static final double TRACK_WIDTH = Units.inchesToMeters(24.5);
+    public static final double TRACK_WIDTH = Units.inchesToMeters(27.5);
     // Distance between centers of right and left wheels on robot
-    public static final double WHEEL_BASE = Units.inchesToMeters(24.5);
+    public static final double WHEEL_BASE = Units.inchesToMeters(24.75);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
         new Translation2d(WHEEL_BASE / 2, TRACK_WIDTH / 2),
@@ -80,20 +84,23 @@ public static final class ArmConstants {
     public static final double BACK_RIGHT_CHASSIS_ANGULAR_OFFSET = Math.PI / 2;
 
     // SPARK MAX CAN IDs
-    public static final int FRONT_LEFT_DRIVING_CAN_ID = 12;
-    public static final int REAR_LEFT_DRIVING_CAN_ID = 18;
-    public static final int FRONT_RIGHT_DRIVING_CAN_ID = 14;
-    public static final int REAR_RIGHT_DRIVING_CAN_ID = 16;
+    public static final int FRONT_LEFT_DRIVING_CAN_ID = 11;
+    public static final int REAR_LEFT_DRIVING_CAN_ID = 13;
+    public static final int FRONT_RIGHT_DRIVING_CAN_ID = 15;
+    public static final int REAR_RIGHT_DRIVING_CAN_ID = 17;
 
-    public static final int FRONT_LEFT_TURNING_CAN_ID = 11;
-    public static final int REAR_LEFT_TURNING_CAN_ID = 17;
-    public static final int FRONT_RIGHT_TURNING_CAN_ID = 13;
-    public static final int REAR_RIGHT_TURNING_CAN_ID = 15;
+    public static final int FRONT_LEFT_TURNING_CAN_ID = 12;
+    public static final int REAR_LEFT_TURNING_CAN_ID = 14;
+    public static final int FRONT_RIGHT_TURNING_CAN_ID = 16;
+    public static final int REAR_RIGHT_TURNING_CAN_ID = 18;
 
     public static final int INTAKE_CAN_ID = 4;
 
-    public static final int ARM_MOTOR_LEFT_CAN_ID = 0; //**we dont know the ID because we dont have the motor */
-    public static final int ARM_MOTOR_RIGHT_CAN_ID = 0; //**we dont know the ID because we dont have the motor */
+    public static final int SHOOTER_MOTOR_LEFT_CAN_ID = 5; 
+    public static final int SHOOTER_MOTOR_RIGHT_CAN_ID = 9; 
+
+    public static final int ARM_MOTOR_LEFT_CAN_ID = 7; 
+    public static final int ARM_MOTOR_RIGHT_CAN_ID = 6; 
 
     public static final boolean GYRO_REVERSED = false;
   }

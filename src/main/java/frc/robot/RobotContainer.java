@@ -59,10 +59,10 @@ public class RobotContainer {
     //driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain, xboxController::getLeftY,
     //   xboxController::getLeftX, xboxController::getRightX, fieldRelativeChooser::getSelected));
   
-    driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain,commandXboxController::getLeftX,
-    commandXboxController::getLeftY, commandXboxController::getRightX, fieldRelativeChooser::getSelected));
+    //driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain,commandXboxController::getLeftX,
+    //commandXboxController::getLeftY, commandXboxController::getRightX, fieldRelativeChooser::getSelected));
     
-    //inTake.setDefaultCommand(new IntakeSubsystemCommand(inTake, xboxController.getHID(), true));
+    //inTake.setDefaultCommand(new IntakeSubsystemCommand(inTake, xboxController.get(), true));
     inTake.setDefaultCommand(new IntakeSubsystemCommand(inTake, xboxController::getAButton, xboxController::getBButton, true));
 
     Arm.setDefaultCommand(new ArmSubsystemCommand(Arm, xboxController::getXButton, xboxController::getYButton, true));
@@ -94,6 +94,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return Autos.templateAuto(driveTrain);
+    return Autos.templateAuto(driveTrain);   
   }
 }

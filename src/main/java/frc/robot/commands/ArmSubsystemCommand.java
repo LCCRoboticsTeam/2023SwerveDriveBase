@@ -44,14 +44,14 @@ public class ArmSubsystemCommand extends CommandBase {
     } else if (ShooterPosition.getAsBoolean()) {
       ArmSubsystem.ShooterPosition();
     } else {
-      ArmSubsystem.UprightPosition(false); 
+    //  ArmSubsystem.UprightPosition(false); 
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    ArmSubsystem.UprightPosition(false);
+    //ArmSubsystem.UprightPosition(false);
   }
 
   // Returns true when the command should end.
