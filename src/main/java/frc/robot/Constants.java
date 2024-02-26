@@ -68,7 +68,7 @@ public static final class ArmConstants {
 }
 
 public enum ArmPosition {
-  UNKNOWN, UPRIGHT, INTAKE, SPEAKER_SHOOTER, AMP_SHOOTER, HANG
+  UNKNOWN, UPRIGHT, INTAKE, SPEAKER_SHOOTER, AMP_SHOOTER, HANG;
 }
 
   public static final class DriveConstants {

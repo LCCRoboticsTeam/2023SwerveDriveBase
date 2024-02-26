@@ -37,7 +37,8 @@ public class ArmSubsystem extends SubsystemBase {
         // Initializes an encoder on DIO pins 0 and 1
         // 2X encoding and inverted
         throughBoreEncoder = new Encoder(0, 1, true, Encoder.EncodingType.k2X);
-               
+        throughBoreEncoder.setDistancePerPulse((double) 360/8192/2);
+
         if (printDebug) {
             System.out.println("ArmSubsystem: MotorID constructor ");
         }
@@ -74,9 +75,9 @@ public class ArmSubsystem extends SubsystemBase {
                     ls_left_rev=talonMotorLeft.isRevLimitSwitchClosed();
                     ls_right_fwd=talonMotorRight.isFwdLimitSwitchClosed();
                     ls_right_rev=talonMotorRight.isRevLimitSwitchClosed();
-                    System.out.println("Waiting to hit upright position. "+ls_left_fwd+
-                                       " - "+ls_left_rev+" - "+ls_right_fwd+
-                                       " - "+ls_right_rev);
+                    // System.out.println("Waiting to hit upright position. "+ls_left_fwd+
+                    //                    " - "+ls_left_rev+" - "+ls_right_fwd+
+                    //                    " - "+ls_right_rev);
                 }  
             }
    
@@ -95,6 +96,7 @@ public class ArmSubsystem extends SubsystemBase {
             BoreEncoderVal=throughBoreEncoder.getRaw();
             if (printDebug) {
                 System.out.println("UprightPosition BoreEncoderVal Start = "+BoreEncoderVal);
+                System.out.println("UprightPosition BoreEncoderVal Start = "+throughBoreEncoder.getDistance());
             }
 
             while (BoreEncoderVal>ArmConstants.ARM_UPRIGHT_BORE_ENCODER_POSITION) {
@@ -112,6 +114,7 @@ public class ArmSubsystem extends SubsystemBase {
             if (printDebug) {
                 BoreEncoderVal=throughBoreEncoder.getRaw();
                 System.out.println("UprightPosition BoreEncoderVal End = "+BoreEncoderVal);
+                System.out.println("UprightPosition BoreEncoderVal End = "+throughBoreEncoder.getDistance());
             }
 
         }
@@ -136,6 +139,7 @@ public class ArmSubsystem extends SubsystemBase {
         BoreEncoderVal=throughBoreEncoder.getRaw();
         if (printDebug) {
             System.out.println("IntakePosition BoreEncoderVal Start = "+BoreEncoderVal);
+            System.out.println("IntakePosition BoreEncoderVal Start = "+throughBoreEncoder.getDistance());
         }
 
         // Run until ARM_INTAKE_BORE_ENCODER_POSITION
@@ -154,6 +158,7 @@ public class ArmSubsystem extends SubsystemBase {
         if (printDebug) {
             BoreEncoderVal=throughBoreEncoder.getRaw();
             System.out.println("IntakePosition BoreEncoderVal End = "+BoreEncoderVal);
+            System.out.println("IntakePosition BoreEncoderVal End = "+throughBoreEncoder.getDistance());
         }    
 
         armPosition = ArmPosition.INTAKE;
@@ -176,6 +181,7 @@ public class ArmSubsystem extends SubsystemBase {
         BoreEncoderVal=throughBoreEncoder.getRaw();
         if (printDebug) {
             System.out.println("SpeakerShooterPosition BoreEncoderVal Start = "+BoreEncoderVal);
+            System.out.println("SpeakerShooterPosition BoreEncoderVal Start = "+throughBoreEncoder.getDistance());
         }
 
         // Run until ARM_SPEAKER_SHOOTER_BORE_ENCODER_POSITION
@@ -194,6 +200,7 @@ public class ArmSubsystem extends SubsystemBase {
         if (printDebug) {
             BoreEncoderVal=throughBoreEncoder.getRaw();
             System.out.println("SpeakerShooterPosition BoreEncoderVal End = "+BoreEncoderVal);
+            System.out.println("SpeakerShooterPosition BoreEncoderVal End = "+throughBoreEncoder.getDistance());
         }    
 
         armPosition = ArmPosition.SPEAKER_SHOOTER;

@@ -21,7 +21,7 @@ public class ShooterSubsystem extends SubsystemBase {
         printDebug = printDebugInput;
 
         talonMotorLeft = new WPI_TalonSRX(motorIDInputLeft);
-        talonMotorLeft.setInverted(false);        
+        talonMotorLeft.setInverted(true);        
         talonMotorRight = new WPI_TalonSRX(motorIDInputRight);
         talonMotorRight.setInverted(true);  
 
@@ -32,7 +32,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /* Sets Shooter to take in game piece */
     public void ShooterIn() {
-        talonMotorLeft.setInverted(false);
+        talonMotorLeft.setInverted(true);
         talonMotorRight.setInverted(true);
 
         talonMotorLeft.set(speed);
@@ -42,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /* Sets Shooter to send game piece */
     public void ShooterOut() {
-        talonMotorLeft.setInverted(true);
+        talonMotorLeft.setInverted(false);
         talonMotorRight.setInverted(false);
 
         talonMotorLeft.set(speed);

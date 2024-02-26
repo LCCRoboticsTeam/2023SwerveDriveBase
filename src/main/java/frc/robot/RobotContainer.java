@@ -44,7 +44,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrainSubsystem driveTrain = new DriveTrainSubsystem();
   private final IntakeSubsystem inTake = new IntakeSubsystem(IntakeConstants.INTAKE_CAN_ID, IntakeConstants.INTAKE_MOTOR_SPEED,false);
-  private final ArmSubsystem Arm = new ArmSubsystem(ArmConstants.ARM_MOTOR_LEFT_CAN_ID, ArmConstants.ARM_MOTOR_RIGHT_CAN_ID, ArmConstants.ARM_MOTOR_SPEED, false);
+  private final ArmSubsystem Arm = new ArmSubsystem(ArmConstants.ARM_MOTOR_LEFT_CAN_ID, ArmConstants.ARM_MOTOR_RIGHT_CAN_ID, ArmConstants.ARM_MOTOR_SPEED, true);
   private final ShooterSubsystem Shooter = new ShooterSubsystem(ShooterConstants.SHOOTER_MOTOR_LEFT_CAN_ID, ShooterConstants.SHOOTER_MOTOR_RIGHT_CAN_ID, ShooterConstants.SHOOTER_MOTOR_SPEED, false);
 
   private final SendableChooser<Boolean> fieldRelativeChooser = new SendableChooser<>();
@@ -69,7 +69,7 @@ public class RobotContainer {
     inTake.setDefaultCommand(new IntakeSubsystemCommand(inTake, xboxController::getAButton, xboxController::getBButton, false));
     // FIXME: Can assign to xbox trigger??
     Shooter.setDefaultCommand(new ShooterSubsystemCommand(Shooter, xboxController::getAButton, xboxController::getBButton, false));
-    Arm.setDefaultCommand(new ArmSubsystemCommand(Arm, xboxController::getXButton, xboxController::getYButton, false));
+    Arm.setDefaultCommand(new ArmSubsystemCommand(Arm, xboxController::getXButton, xboxController::getYButton, true));
   }
 
   /**
