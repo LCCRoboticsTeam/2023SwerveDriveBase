@@ -9,7 +9,6 @@ import java.util.function.BooleanSupplier;
 import frc.robot.subsystems.ShooterSubsystem;
 
 import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -20,12 +19,16 @@ public class ShooterSubsystemCommand extends CommandBase {
   //private final XboxController xboxController;
   private final BooleanSupplier ShooterIn;
   private final BooleanSupplier ShooterOut;
+  private final boolean ShooterOutOnly;
+  private final boolean printDebugInput;
   
   /** Creates a new SwerveControllerDrive. */
-  public ShooterSubsystemCommand(ShooterSubsystem ShooterSubsystem, BooleanSupplier ShooterIn, BooleanSupplier ShooterOut, boolean printDebugInput) {
+  public ShooterSubsystemCommand(ShooterSubsystem ShooterSubsystem, BooleanSupplier ShooterOut, BooleanSupplier ShooterIn, boolean ShooterOutOnly, boolean printDebugInput) {
     this.ShooterSubsystem = ShooterSubsystem;
-    this.ShooterIn = ShooterIn;
     this.ShooterOut = ShooterOut;
+    this.ShooterIn = ShooterIn;
+    this.ShooterOutOnly = ShooterOutOnly;
+    this.printDebugInput = printDebugInput;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.ShooterSubsystem);
   }
@@ -40,14 +43,18 @@ public class ShooterSubsystemCommand extends CommandBase {
   @Override
   public void execute() {
   
-    if (ShooterIn.getAsBoolean()){
-      // Disable for now
-      //ShooterSubsystem.ShooterIn();
-    } else if (ShooterOut.getAsBoolean()) {
+    if (ShooterOut.getAsBoolean()){
       ShooterSubsystem.ShooterOut();
-    } else {
-      ShooterSubsystem.ShooterOff(); 
+    } 
+    else {
+      if ((!ShooterOutOnly) && (ShooterIn.getAsBoolean())) {
+        ShooterSubsystem.ShooterIn();
+      } 
+      else {
+        ShooterSubsystem.ShooterOff(); 
+      }
     }
+
   }
 
   // Called once the command ends or is interrupted.

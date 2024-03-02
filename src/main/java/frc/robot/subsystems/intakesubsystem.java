@@ -4,13 +4,18 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import frc.robot.Robot;
+import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
    
-    private final WPI_TalonSRX talonMotor;    
+    private final WPI_TalonSRX talonMotor;
+    //private final Encoder throughBoreEncoder;
+    DigitalInput BeamBreak; 
     private double speed;
     private boolean printDebug;
   
@@ -20,6 +25,9 @@ public class IntakeSubsystem extends SubsystemBase {
         printDebug = printDebugInput;
 
         talonMotor = new WPI_TalonSRX(motorIDInput);
+        BeamBreak = new DigitalInput(IntakeConstants.INTAKE_BEAM_BREAK_DIO); 
+
+        // Positive speed value is for intakeIn
         talonMotor.setInverted(false);        
 
         if (printDebug) {
@@ -29,15 +37,22 @@ public class IntakeSubsystem extends SubsystemBase {
 
     /* Sets intake to take in game piece */
     public void intakeIn() {
-        talonMotor.setInverted(false);
+        int BoreEncoderVal;
+
+        //talonMotor.setInverted(false);
         talonMotor.set(speed);
+
+        //BoreEncoderVal=throughBoreEncoder.getRate();
+        //if (printDebug) {
+        //    System.out.println("intakeIn BoreEncoderVal = "+BoreEncoderVal);
+        //}
 
     }
 
     /* Sets intake to spit out game piece */
     public void intakeOut() {
-        talonMotor.setInverted(true);
-        talonMotor.set(speed);
+        //talonMotor.setInverted(true);
+        talonMotor.set(-speed);
 
     }
 

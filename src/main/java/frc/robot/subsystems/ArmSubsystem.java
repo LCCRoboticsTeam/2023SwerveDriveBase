@@ -22,6 +22,7 @@ public class ArmSubsystem extends SubsystemBase {
     private final Encoder throughBoreEncoder; 
     private double speed;
     private boolean printDebug;
+    private boolean printDebugLimitSwitches = false;
     public ArmPosition armPosition = ArmPosition.UNKNOWN;
   
     public ArmSubsystem (int motorIDInputLeft, int motorIDInputRight, double speed, boolean printDebugInput) {
@@ -30,13 +31,15 @@ public class ArmSubsystem extends SubsystemBase {
         printDebug = printDebugInput;
 
         talonMotorLeft = new WPI_TalonSRX(motorIDInputLeft);
-        talonMotorLeft.setInverted(false);        
         talonMotorRight = new WPI_TalonSRX(motorIDInputRight);
-        talonMotorRight.setInverted(true);    
+
+        // This is the setting for moving arm downward, which will happen when speed is greater than 0
+        talonMotorLeft.setInverted(true);        
+        talonMotorRight.setInverted(false);    
         
         // Initializes an encoder on DIO pins 0 and 1
         // 2X encoding and inverted
-        throughBoreEncoder = new Encoder(0, 1, true, Encoder.EncodingType.k2X);
+        throughBoreEncoder = new Encoder(ArmConstants.ARM_BORE_ENCODER_CHANNEL_A_DIO, ArmConstants.ARM_BORE_ENCODER_CHANNEL_B_DIO, true, Encoder.EncodingType.k2X);
         throughBoreEncoder.setDistancePerPulse((double) 360/8192/2);
 
         if (printDebug) {
@@ -44,79 +47,134 @@ public class ArmSubsystem extends SubsystemBase {
         }
     }
 
+    public void InitializeEncoder() {
+        throughBoreEncoder.reset();
+
+    }
+
+    public void ReverseLimitPosition(boolean initializeEncoder) {
+        boolean speedSet = false;
+        int BoreEncoderVal;
+        int ls_left_fwd, ls_left_rev, ls_right_fwd, ls_right_rev;
+
+        // FIXME: Update once other limit switch is in place
+        //while ((talonMotorLeft.isFwdLimitSwitchClosed()!=1) && (talonMotorRight.isRevLimitSwitchClosed()!=1)) {
+        while (talonMotorLeft.isRevLimitSwitchClosed()!=1) {
+            if (speedSet==false) {
+                // Negative speed means moving arm upward/reverse
+                talonMotorLeft.set(-speed);
+                talonMotorRight.set(-speed);
+                speedSet=true;
+                }
+            if (printDebugLimitSwitches) {
+                ls_left_fwd=talonMotorLeft.isFwdLimitSwitchClosed();
+                ls_left_rev=talonMotorLeft.isRevLimitSwitchClosed();
+                ls_right_fwd=talonMotorRight.isFwdLimitSwitchClosed();
+                ls_right_rev=talonMotorRight.isRevLimitSwitchClosed();
+                System.out.println("Limit Switches: ls_left_fwd:"+ls_left_fwd+
+                                    " ls_left_rev:"+ls_left_rev+
+                                    " ls_right_fwd:"+ls_right_fwd+
+                                    " ls_right_rev"+ls_right_rev);
+            }  
+        }
+       
+        // Stop motors in case one of them still running
+        talonMotorLeft.set(0.0);
+        talonMotorRight.set(0.0);
+    
+        if (initializeEncoder) {
+            // Initialize (zero) the Bore Encoder
+            throughBoreEncoder.reset(); 
+        }
+
+        if (printDebug) {
+            BoreEncoderVal=throughBoreEncoder.getRaw();
+            System.out.println("ReverseLimitPosition BoreEncoderVal End = "+BoreEncoderVal);
+        }
+
+    }
+
+    public void ForwardLimitPosition() {
+        boolean speedSet = false;
+        int BoreEncoderVal;
+        int ls_left_fwd, ls_left_rev, ls_right_fwd, ls_right_rev;
+
+        //while ((talonMotorLeft.isFwdLimitSwitchClosed()!=1) || (talonMotorRight.isRevLimitSwitchClosed()!=1)) {
+        while ((talonMotorLeft.isFwdLimitSwitchClosed()!=1) && (talonMotorRight.isFwdLimitSwitchClosed()!=1)) {
+            if (speedSet==false) {
+                // Positive speed means moving arm downward/forward
+                talonMotorLeft.set(speed);
+                talonMotorRight.set(speed);
+                speedSet=true;
+            }
+            if (printDebugLimitSwitches) {
+                ls_left_fwd=talonMotorLeft.isFwdLimitSwitchClosed();
+                ls_left_rev=talonMotorLeft.isRevLimitSwitchClosed();
+                ls_right_fwd=talonMotorRight.isFwdLimitSwitchClosed();
+                ls_right_rev=talonMotorRight.isRevLimitSwitchClosed();
+                System.out.println("Limit Switches: ls_left_fwd:"+ls_left_fwd+
+                                        " ls_left_rev:"+ls_left_rev+
+                                        " ls_right_fwd:"+ls_right_fwd+
+                                        " ls_right_rev"+ls_right_rev);
+                }  
+            }
+                   
+        // Stop motors in case one of them still running
+        talonMotorLeft.set(0.0);
+        talonMotorRight.set(0.0);
+
+        if (printDebug) {
+            BoreEncoderVal=throughBoreEncoder.getRaw();
+            System.out.println("ForwardLimitPosition BoreEncoderVal End = "+BoreEncoderVal);
+        }
+    }
+
     /* Sets arm to upright position which is for start of game */
-    public void UprightPosition(boolean initializeEncoder) {
+    public void UprightPosition() {
         int BoreEncoderVal;
         boolean speedSet = false;
-        int ls_left_fwd, ls_left_rev, ls_right_fwd, ls_right_rev;
 
         //SmartDashboard.putNumber("arm encoder direction",throughBoreEncoder.getRaw());
 
         if (printDebug) {
              System.out.println("UprightPosition");
         }
-
-        // This is the setting for moving arm upward
-        talonMotorLeft.setInverted(false);
-        talonMotorRight.setInverted(true);
         
-        if (initializeEncoder) {
-            // Run until limit switch stops motors, then reset encoder
-            // FIXME: Update one other limit switch is in place
-            //while ((talonMotorLeft.isFwdLimitSwitchClosed()!=1) || (talonMotorRight.isRevLimitSwitchClosed()!=1)) {
-            while (talonMotorLeft.isRevLimitSwitchClosed()!=1) {
-                if (speedSet==false) {
-                    talonMotorLeft.set(speed);
-                    talonMotorRight.set(speed);
-                    speedSet=true;
-                }
-                if (printDebug) {
-                    ls_left_fwd=talonMotorLeft.isFwdLimitSwitchClosed();
-                    ls_left_rev=talonMotorLeft.isRevLimitSwitchClosed();
-                    ls_right_fwd=talonMotorRight.isFwdLimitSwitchClosed();
-                    ls_right_rev=talonMotorRight.isRevLimitSwitchClosed();
-                    // System.out.println("Waiting to hit upright position. "+ls_left_fwd+
-                    //                    " - "+ls_left_rev+" - "+ls_right_fwd+
-                    //                    " - "+ls_right_rev);
-                }  
-            }
-   
-            // Stop motors in case one of them still running
-            talonMotorLeft.set(0.0);
-            talonMotorRight.set(0.0);
-
-            // Initialize (zero) the Bore Encoder
-            throughBoreEncoder.reset(); 
-
-            // FIXME: Should the Arm move forward slightly so it does not hit limit switch?
- 
+        // Run until ARM_UPRIGHT_BORE_ENCODER_POSITION
+        BoreEncoderVal=throughBoreEncoder.getRaw();
+        if (printDebug) {
+            System.out.println("UprightPosition BoreEncoderVal Start = "+BoreEncoderVal);
+            System.out.println("UprightPosition BoreEncoderVal Start = "+throughBoreEncoder.getDistance());
         }
-        else {
-            // Run until ARM_UPRIGHT_BORE_ENCODER_POSITION
-            BoreEncoderVal=throughBoreEncoder.getRaw();
-            if (printDebug) {
-                System.out.println("UprightPosition BoreEncoderVal Start = "+BoreEncoderVal);
-                System.out.println("UprightPosition BoreEncoderVal Start = "+throughBoreEncoder.getDistance());
-            }
 
+        if (BoreEncoderVal>ArmConstants.ARM_UPRIGHT_BORE_ENCODER_POSITION) {
             while (BoreEncoderVal>ArmConstants.ARM_UPRIGHT_BORE_ENCODER_POSITION) {
                 if (speedSet==false) {
+                    talonMotorLeft.set(-speed);
+                    talonMotorRight.set(-speed);
+                    speedSet=true;
+                }
+            BoreEncoderVal=throughBoreEncoder.getRaw();
+            }
+        }
+        else {
+            while (BoreEncoderVal<ArmConstants.ARM_UPRIGHT_BORE_ENCODER_POSITION) {
+                if (speedSet==false) {
                     talonMotorLeft.set(speed);
                     talonMotorRight.set(speed);
                     speedSet=true;
                 }
-                BoreEncoderVal=throughBoreEncoder.getRaw();
-            }
+            BoreEncoderVal=throughBoreEncoder.getRaw();   
+            }         
+        }
 
-            talonMotorLeft.set(0);
-            talonMotorRight.set(0);
+        talonMotorLeft.set(0);
+        talonMotorRight.set(0);
 
-            if (printDebug) {
-                BoreEncoderVal=throughBoreEncoder.getRaw();
-                System.out.println("UprightPosition BoreEncoderVal End = "+BoreEncoderVal);
-                System.out.println("UprightPosition BoreEncoderVal End = "+throughBoreEncoder.getDistance());
-            }
-
+        if (printDebug) {
+            BoreEncoderVal=throughBoreEncoder.getRaw();
+            System.out.println("UprightPosition BoreEncoderVal End = "+BoreEncoderVal);
+            System.out.println("UprightPosition BoreEncoderVal End = "+throughBoreEncoder.getDistance());
         }
 
         armPosition = ArmPosition.UPRIGHT;
@@ -132,10 +190,6 @@ public class ArmSubsystem extends SubsystemBase {
             System.out.println("IntakePosition");
         }
 
-        // This is the setting for moving arm downward
-        talonMotorLeft.setInverted(true);
-        talonMotorRight.setInverted(false);
-
         BoreEncoderVal=throughBoreEncoder.getRaw();
         if (printDebug) {
             System.out.println("IntakePosition BoreEncoderVal Start = "+BoreEncoderVal);
@@ -143,13 +197,25 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         // Run until ARM_INTAKE_BORE_ENCODER_POSITION
-        while (BoreEncoderVal<ArmConstants.ARM_INTAKE_BORE_ENCODER_POSITION) {
-            if (speedSet==false) {
-                talonMotorLeft.set(speed);
-                talonMotorRight.set(speed);
-                speedSet=true;
-            }
+        if (BoreEncoderVal>ArmConstants.ARM_INTAKE_BORE_ENCODER_POSITION) {
+            while (BoreEncoderVal>ArmConstants.ARM_INTAKE_BORE_ENCODER_POSITION) {
+                if (speedSet==false) {
+                    talonMotorLeft.set(-speed);
+                    talonMotorRight.set(-speed);
+                    speedSet=true;
+                }
             BoreEncoderVal=throughBoreEncoder.getRaw();
+            }
+        }
+        else {
+            while (BoreEncoderVal<ArmConstants.ARM_INTAKE_BORE_ENCODER_POSITION) {
+                if (speedSet==false) {
+                    talonMotorLeft.set(speed);
+                    talonMotorRight.set(speed);
+                    speedSet=true;
+                }
+            BoreEncoderVal=throughBoreEncoder.getRaw();   
+            }         
         }
 
         talonMotorLeft.set(0);
@@ -185,13 +251,25 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         // Run until ARM_SPEAKER_SHOOTER_BORE_ENCODER_POSITION
-        while (BoreEncoderVal>ArmConstants.ARM_SPEAKER_SHOOTER_BORE_ENCODER_POSITION) {
-            if (speedSet==false) {
-                talonMotorLeft.set(speed);
-                talonMotorRight.set(speed);
-                speedSet=true;
-            }
+        if (BoreEncoderVal>ArmConstants.ARM_SPEAKER_SHOOTER_BORE_ENCODER_POSITION) {
+            while (BoreEncoderVal>ArmConstants.ARM_SPEAKER_SHOOTER_BORE_ENCODER_POSITION) {
+                if (speedSet==false) {
+                    talonMotorLeft.set(-speed);
+                    talonMotorRight.set(-speed);
+                    speedSet=true;
+                }
             BoreEncoderVal=throughBoreEncoder.getRaw();
+            }
+        }
+        else {
+            while (BoreEncoderVal<ArmConstants.ARM_SPEAKER_SHOOTER_BORE_ENCODER_POSITION) {
+                if (speedSet==false) {
+                    talonMotorLeft.set(speed);
+                    talonMotorRight.set(speed);
+                    speedSet=true;
+                }
+            BoreEncoderVal=throughBoreEncoder.getRaw();  
+            }          
         }
 
         talonMotorLeft.set(0);
@@ -226,14 +304,26 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         // Run until ARM_AMP_SHOOTER_BORE_ENCODER_POSITION
-        while (BoreEncoderVal>ArmConstants.ARM_AMP_SHOOTER_BORE_ENCODER_POSITION) {
-            if (speedSet==false) {
-                talonMotorLeft.set(speed);
-                talonMotorRight.set(speed);
-                speedSet=true;
-            }
+        if (BoreEncoderVal>ArmConstants.ARM_AMP_SHOOTER_BORE_ENCODER_POSITION) {
+            while (BoreEncoderVal>ArmConstants.ARM_AMP_SHOOTER_BORE_ENCODER_POSITION) {
+                if (speedSet==false) {
+                    talonMotorLeft.set(-speed);
+                    talonMotorRight.set(-speed);
+                    speedSet=true;
+                }
             BoreEncoderVal=throughBoreEncoder.getRaw();
+            }
         }
+        else {
+            while (BoreEncoderVal<ArmConstants.ARM_AMP_SHOOTER_BORE_ENCODER_POSITION) {
+                if (speedSet==false) {
+                    talonMotorLeft.set(speed);
+                    talonMotorRight.set(speed);
+                    speedSet=true;
+                }
+            BoreEncoderVal=throughBoreEncoder.getRaw(); 
+            }           
+        }         
 
         talonMotorLeft.set(0);
         talonMotorRight.set(0);
@@ -266,14 +356,26 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         // Run until ARM_HANG_BORE_ENCODER_POSITION
-        while (BoreEncoderVal>ArmConstants.ARM_HANG_BORE_ENCODER_POSITION) {
-            if (speedSet==false) {
-                talonMotorLeft.set(speed);
-                talonMotorRight.set(speed);
-                speedSet=true;
-            }
+        if (BoreEncoderVal>ArmConstants.ARM_HANG_BORE_ENCODER_POSITION) {
+            while (BoreEncoderVal>ArmConstants.ARM_HANG_BORE_ENCODER_POSITION) {
+                if (speedSet==false) {
+                    talonMotorLeft.set(-speed);
+                    talonMotorRight.set(-speed);
+                    speedSet=true;
+                }
             BoreEncoderVal=throughBoreEncoder.getRaw();
+            }
         }
+        else {
+            while (BoreEncoderVal<ArmConstants.ARM_HANG_BORE_ENCODER_POSITION) {
+                if (speedSet==false) {
+                    talonMotorLeft.set(speed);
+                    talonMotorRight.set(speed);
+                    speedSet=true;
+                }
+            BoreEncoderVal=throughBoreEncoder.getRaw();    
+            }        
+        }  
 
         talonMotorLeft.set(0);
         talonMotorRight.set(0);

@@ -9,7 +9,6 @@ import java.util.function.BooleanSupplier;
 import frc.robot.subsystems.IntakeSubsystem;
 
 import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -17,15 +16,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class IntakeSubsystemCommand extends CommandBase {
 
   private final IntakeSubsystem IntakeSubsystem;
-  //private final XboxController xboxController;
-  private final BooleanSupplier InTakeIn;
-  private final BooleanSupplier InTakeOut;
+  private final BooleanSupplier IntakeIn;
+  private final BooleanSupplier IntakeOut;
+  private final boolean IntakeInOnly;
+  private final boolean printDebugInput;
   
-  public IntakeSubsystemCommand(IntakeSubsystem IntakeSubsystem, BooleanSupplier InTakeIn, BooleanSupplier InTakeOut, boolean printDebugInput) {
+  public IntakeSubsystemCommand(IntakeSubsystem IntakeSubsystem, BooleanSupplier IntakeIn, BooleanSupplier IntakeOut, boolean IntakeInOnly, boolean printDebugInput) {
     this.IntakeSubsystem = IntakeSubsystem;
-    //this.xboxController = xboxController;
-    this.InTakeIn = InTakeIn;
-    this.InTakeOut = InTakeOut;
+    this.IntakeIn = IntakeIn;
+    this.IntakeOut = IntakeOut;
+    this.IntakeInOnly = IntakeInOnly;
+    this.printDebugInput = printDebugInput;
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.IntakeSubsystem);
   }
@@ -40,14 +42,18 @@ public class IntakeSubsystemCommand extends CommandBase {
   @Override
   public void execute() {
   
-    if (InTakeIn.getAsBoolean()){
+    if (IntakeIn.getAsBoolean()){
       IntakeSubsystem.intakeIn();
-    } else if (InTakeOut.getAsBoolean()) {
-      // FIXME: Disable for now
-      //IntakeSubsystem.intakeOut();
-    } else {
-      IntakeSubsystem.intakeOff(); 
+    } 
+    else {
+      if ((!IntakeInOnly) && (IntakeOut.getAsBoolean())) {
+        IntakeSubsystem.intakeOut();
+        }
+      else {
+        IntakeSubsystem.intakeOff();
+      }
     }
+
   }
 
   // Called once the command ends or is interrupted.

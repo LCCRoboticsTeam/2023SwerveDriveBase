@@ -37,9 +37,9 @@ public class RobotContainer {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController commandXboxController = new CommandXboxController(
-      OperatorConstants.XBOX_CONTROLLER_PORT);
+      OperatorConstants.DRIVE_TRAIN_XBOX_CONTROLLER_PORT);
    private final XboxController xboxController = new XboxController(
-    OperatorConstants.XBOX_CONTROLLER_PORT);
+    OperatorConstants.ARM_AND_SHOOTAKE_XBOX_CONTROLLER_PORT);
 
   // The robot's subsystems and commands are defined here...
   private final DriveTrainSubsystem driveTrain = new DriveTrainSubsystem();
@@ -59,17 +59,11 @@ public class RobotContainer {
     fieldRelativeChooser.setDefaultOption("Field Relative",  true);
     fieldRelativeChooser.addOption("Robot Relative", false);
     SmartDashboard.putData(fieldRelativeChooser);
-
-    //driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain, xboxController::getLeftY,
-    //   xboxController::getLeftX, xboxController::getRightX, fieldRelativeChooser::getSelected));
   
-    //driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain,commandXboxController::getLeftX,
-    //commandXboxController::getLeftY, commandXboxController::getRightX, fieldRelativeChooser::getSelected));
-    
-    inTake.setDefaultCommand(new IntakeSubsystemCommand(inTake, xboxController::getAButton, xboxController::getBButton, false));
-    // FIXME: Can assign to xbox trigger??
-    Shooter.setDefaultCommand(new ShooterSubsystemCommand(Shooter, xboxController::getAButton, xboxController::getBButton, false));
-    Arm.setDefaultCommand(new ArmSubsystemCommand(Arm, xboxController::getXButton, xboxController::getYButton, true));
+    driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain,commandXboxController::getLeftX, commandXboxController::getLeftY, commandXboxController::getRightX, fieldRelativeChooser::getSelected));
+    inTake.setDefaultCommand(new IntakeSubsystemCommand(inTake, xboxController::getAButton, xboxController::getLeftBumper, true, false));
+    Shooter.setDefaultCommand(new ShooterSubsystemCommand(Shooter, xboxController::getBButton, xboxController::getRightBumper, true, false));
+    Arm.setDefaultCommand(new ArmSubsystemCommand(Arm, xboxController::getBackButton, xboxController::getStartButton, xboxController::getXButton, xboxController::getYButton, true));
   }
 
   /**

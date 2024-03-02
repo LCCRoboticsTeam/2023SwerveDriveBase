@@ -18,13 +18,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ArmSubsystemCommand extends CommandBase {
 
   private final ArmSubsystem ArmSubsystem;
-  private final BooleanSupplier IntakeAndSpeakerPosition;
-  private final BooleanSupplier AmpShooterPosition;
+  private final BooleanSupplier ReverseForwardPosition;
+  private final BooleanSupplier UprightPosition;
+  private final BooleanSupplier IntakeAndAmpPosition;
+  private final BooleanSupplier SpeakerShooterPosition;
   
-  public ArmSubsystemCommand(ArmSubsystem ArmSubsystem, BooleanSupplier IntakeAndSpeakerPosition, BooleanSupplier AmpShooterPosition, boolean printDebugInput) {
+  public ArmSubsystemCommand(ArmSubsystem ArmSubsystem, BooleanSupplier ReverseForwardPosition, BooleanSupplier UprightPosition, BooleanSupplier IntakeAndAmpPosition, BooleanSupplier SpeakerShooterPosition, boolean printDebugInput) {
     this.ArmSubsystem = ArmSubsystem;
-    this.IntakeAndSpeakerPosition = IntakeAndSpeakerPosition;
-    this.AmpShooterPosition = AmpShooterPosition;
+    this.ReverseForwardPosition = ReverseForwardPosition;
+    this.UprightPosition = UprightPosition;
+    this.IntakeAndAmpPosition = IntakeAndAmpPosition;
+    this.SpeakerShooterPosition = SpeakerShooterPosition;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.ArmSubsystem);
   }
@@ -32,30 +36,47 @@ public class ArmSubsystemCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ArmSubsystem.UprightPosition(true); 
+    // By default will do this incase there is scenario were we plan to start with 
+    // ARM in known 0 position.
+    ArmSubsystem.InitializeEncoder();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
   
-    if (IntakeAndSpeakerPosition.getAsBoolean()){
-      if (ArmSubsystem.armPosition != ArmPosition.INTAKE){
-          ArmSubsystem.IntakePosition();
-      } else {
-        ArmSubsystem.SpeakerShooterPosition();
+    if (ReverseForwardPosition.getAsBoolean()) {
+      if (ArmSubsystem.armPosition != ArmPosition.REVERSE_LIMIT){
+        ArmSubsystem.ReverseLimitPosition(true);
       }
-    } else if (AmpShooterPosition.getAsBoolean()) {
-      ArmSubsystem.AmpShooterPosition();
-    } else {
-    //  ArmSubsystem.UprightPosition(false); 
+      else {
+        ArmSubsystem.ForwardLimitPosition();
+      } 
     }
+    if (UprightPosition.getAsBoolean()) {
+      ArmSubsystem.UprightPosition();
+      return;
+    }
+    if (IntakeAndAmpPosition.getAsBoolean()){
+      if (ArmSubsystem.armPosition != ArmPosition.INTAKE){
+        ArmSubsystem.IntakePosition();
+      } 
+      else {
+        ArmSubsystem.AmpShooterPosition();
+      }
+      return;
+    }
+    if (SpeakerShooterPosition.getAsBoolean()) {
+      ArmSubsystem.SpeakerShooterPosition();
+      return;
+    }
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //ArmSubsystem.UprightPosition(false);
+    //ArmSubsystem.UprightPosition();
   }
 
   // Returns true when the command should end.

@@ -27,6 +27,8 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   public static class OperatorConstants {
     public static final int XBOX_CONTROLLER_PORT = 0;
+    public static final int DRIVE_TRAIN_XBOX_CONTROLLER_PORT = 0;
+    public static final int ARM_AND_SHOOTAKE_XBOX_CONTROLLER_PORT = 0;
     public static final double XBOX_DEADBAND = 0.05;
   }
 
@@ -47,6 +49,7 @@ public final class Constants {
 
 public static final class IntakeConstants {
   public static final double INTAKE_MOTOR_SPEED = 0.3;
+  public static final int INTAKE_BEAM_BREAK_DIO = 2;
   public static final int INTAKE_CAN_ID = 4;
 }
 
@@ -60,15 +63,17 @@ public static final class ArmConstants {
   public static final double ARM_MOTOR_SPEED = 0.4;
   public static final int ARM_MOTOR_LEFT_CAN_ID = 7; 
   public static final int ARM_MOTOR_RIGHT_CAN_ID = 6; 
+  public static final int ARM_BORE_ENCODER_CHANNEL_A_DIO = 0;
+  public static final int ARM_BORE_ENCODER_CHANNEL_B_DIO = 1;
   public static final int ARM_UPRIGHT_BORE_ENCODER_POSITION = 1;
-  public static final int ARM_SPEAKER_SHOOTER_BORE_ENCODER_POSITION = 200;
   public static final int ARM_AMP_SHOOTER_BORE_ENCODER_POSITION = 200;
+  public static final int ARM_SPEAKER_SHOOTER_BORE_ENCODER_POSITION = 200;
   public static final int ARM_HANG_BORE_ENCODER_POSITION = 400;
   public static final int ARM_INTAKE_BORE_ENCODER_POSITION = 900;
 }
 
 public enum ArmPosition {
-  UNKNOWN, UPRIGHT, INTAKE, SPEAKER_SHOOTER, AMP_SHOOTER, HANG;
+  UNKNOWN, REVERSE_LIMIT, FORWARD_LIMIT, UPRIGHT, INTAKE, SPEAKER_SHOOTER, AMP_SHOOTER, HANG;
 }
 
   public static final class DriveConstants {

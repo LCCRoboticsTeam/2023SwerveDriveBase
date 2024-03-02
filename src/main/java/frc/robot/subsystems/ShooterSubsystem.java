@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.Encoder;
 
 import frc.robot.Robot;
 
@@ -12,6 +13,8 @@ public class ShooterSubsystem extends SubsystemBase {
    
     private final WPI_TalonSRX talonMotorLeft;   
     private final WPI_TalonSRX talonMotorRight;
+    //private final Encoder throughBoreEncoderLeft;
+    //private final Encoder throughBoreEncoderRight;
     private double speed;
     private boolean printDebug;
   
@@ -32,8 +35,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /* Sets Shooter to take in game piece */
     public void ShooterIn() {
-        talonMotorLeft.setInverted(true);
-        talonMotorRight.setInverted(true);
+        //talonMotorLeft.setInverted(true);
+        //talonMotorRight.setInverted(true);
 
         talonMotorLeft.set(speed);
         talonMotorRight.set(speed);
@@ -42,11 +45,22 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /* Sets Shooter to send game piece */
     public void ShooterOut() {
-        talonMotorLeft.setInverted(false);
-        talonMotorRight.setInverted(false);
+        int BoreEncoderValLeft;
+        int BoreEncoderValRight;
 
-        talonMotorLeft.set(speed);
-        talonMotorRight.set(speed);
+
+        //talonMotorLeft.setInverted(false);
+        //talonMotorRight.setInverted(false);
+
+        talonMotorLeft.set(-speed);
+        talonMotorRight.set(-speed);
+
+        //BoreEncoderValLeft=throughBoreEncoderLeft.getRate();
+        //BoreEncoderValRight=throughBoreEncoderRight.getRate()
+        //if (printDebug) {
+        //    System.out.println("intakeIn BoreEncoderValLeft = "+BoreEncoderValLeft);
+        //    System.out.println("intakeIn BoreEncoderValRight = "+BoreEncoderValRight);
+        //}
 
     }
 
