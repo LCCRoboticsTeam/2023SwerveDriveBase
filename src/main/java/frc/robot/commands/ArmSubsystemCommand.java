@@ -53,7 +53,7 @@ public class ArmSubsystemCommand extends CommandBase {
         ArmSubsystem.ForwardLimitPosition();
       } 
     }
-    if (UprightPosition.getAsBoolean()) {
+    if (UprightPosition.getAsBoolean() && (ArmSubsystem.armPosition != ArmPosition.UPRIGHT)) {
       ArmSubsystem.UprightPosition();
       return;
     }
@@ -66,7 +66,7 @@ public class ArmSubsystemCommand extends CommandBase {
       }
       return;
     }
-    if (SpeakerShooterPosition.getAsBoolean()) {
+    if (SpeakerShooterPosition.getAsBoolean() && (ArmSubsystem.armPosition != ArmPosition.SPEAKER_SHOOTER)) {
       ArmSubsystem.SpeakerShooterPosition();
       return;
     }

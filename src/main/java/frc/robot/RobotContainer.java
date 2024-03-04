@@ -44,7 +44,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrainSubsystem driveTrain = new DriveTrainSubsystem();
   private final IntakeSubsystem inTake = new IntakeSubsystem(IntakeConstants.INTAKE_CAN_ID, IntakeConstants.INTAKE_MOTOR_SPEED,false);
-  private final ArmSubsystem Arm = new ArmSubsystem(ArmConstants.ARM_MOTOR_LEFT_CAN_ID, ArmConstants.ARM_MOTOR_RIGHT_CAN_ID, ArmConstants.ARM_MOTOR_SPEED, true);
+  private final ArmSubsystem Arm = new ArmSubsystem(ArmConstants.ARM_MOTOR_LEFT_CAN_ID, ArmConstants.ARM_MOTOR_RIGHT_CAN_ID, ArmConstants.ARM_MOTOR_SPEED, false);
   private final ShooterSubsystem Shooter = new ShooterSubsystem(ShooterConstants.SHOOTER_MOTOR_LEFT_CAN_ID, ShooterConstants.SHOOTER_MOTOR_RIGHT_CAN_ID, ShooterConstants.SHOOTER_MOTOR_SPEED, false);
 
   private final SendableChooser<Boolean> fieldRelativeChooser = new SendableChooser<>();
@@ -58,12 +58,12 @@ public class RobotContainer {
 
     fieldRelativeChooser.setDefaultOption("Field Relative",  true);
     fieldRelativeChooser.addOption("Robot Relative", false);
-    SmartDashboard.putData(fieldRelativeChooser);
+    //SmartDashboard.putData(fieldRelativeChooser);
   
     driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain,commandXboxController::getLeftX, commandXboxController::getLeftY, commandXboxController::getRightX, fieldRelativeChooser::getSelected));
     inTake.setDefaultCommand(new IntakeSubsystemCommand(inTake, xboxController::getAButton, xboxController::getLeftBumper, true, false));
     Shooter.setDefaultCommand(new ShooterSubsystemCommand(Shooter, xboxController::getBButton, xboxController::getRightBumper, true, false));
-    Arm.setDefaultCommand(new ArmSubsystemCommand(Arm, xboxController::getBackButton, xboxController::getStartButton, xboxController::getXButton, xboxController::getYButton, true));
+    Arm.setDefaultCommand(new ArmSubsystemCommand(Arm, xboxController::getBackButton, xboxController::getStartButton, xboxController::getXButton, xboxController::getYButton, false));
   }
 
   /**

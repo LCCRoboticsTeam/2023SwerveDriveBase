@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import javax.net.ssl.TrustManager;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import frc.robot.Robot;
@@ -35,7 +36,10 @@ public class ArmSubsystem extends SubsystemBase {
 
         // This is the setting for moving arm downward, which will happen when speed is greater than 0
         talonMotorLeft.setInverted(true);        
-        talonMotorRight.setInverted(false);    
+        talonMotorRight.setInverted(false);   
+        
+        talonMotorRight.setNeutralMode(NeutralMode.Brake);
+        talonMotorLeft.setNeutralMode(NeutralMode.Brake);
         
         // Initializes an encoder on DIO pins 0 and 1
         // 2X encoding and inverted
@@ -59,7 +63,8 @@ public class ArmSubsystem extends SubsystemBase {
 
         // FIXME: Update once other limit switch is in place
         //while ((talonMotorLeft.isFwdLimitSwitchClosed()!=1) && (talonMotorRight.isRevLimitSwitchClosed()!=1)) {
-        while (talonMotorLeft.isRevLimitSwitchClosed()!=1) {
+        //while (talonMotorLeft.isRevLimitSwitchClosed()!=1) {
+        while (talonMotorRight.isFwdLimitSwitchClosed()!=1) {
             if (speedSet==false) {
                 // Negative speed means moving arm upward/reverse
                 talonMotorLeft.set(-speed);
@@ -92,6 +97,8 @@ public class ArmSubsystem extends SubsystemBase {
             System.out.println("ReverseLimitPosition BoreEncoderVal End = "+BoreEncoderVal);
         }
 
+        armPosition = ArmPosition.REVERSE_LIMIT;
+
     }
 
     public void ForwardLimitPosition() {
@@ -100,7 +107,7 @@ public class ArmSubsystem extends SubsystemBase {
         int ls_left_fwd, ls_left_rev, ls_right_fwd, ls_right_rev;
 
         //while ((talonMotorLeft.isFwdLimitSwitchClosed()!=1) || (talonMotorRight.isRevLimitSwitchClosed()!=1)) {
-        while ((talonMotorLeft.isFwdLimitSwitchClosed()!=1) && (talonMotorRight.isFwdLimitSwitchClosed()!=1)) {
+        while (talonMotorLeft.isFwdLimitSwitchClosed()!=1) {
             if (speedSet==false) {
                 // Positive speed means moving arm downward/forward
                 talonMotorLeft.set(speed);
@@ -116,6 +123,7 @@ public class ArmSubsystem extends SubsystemBase {
                                         " ls_left_rev:"+ls_left_rev+
                                         " ls_right_fwd:"+ls_right_fwd+
                                         " ls_right_rev"+ls_right_rev);
+                
                 }  
             }
                    
@@ -123,10 +131,14 @@ public class ArmSubsystem extends SubsystemBase {
         talonMotorLeft.set(0.0);
         talonMotorRight.set(0.0);
 
-        if (printDebug) {
+        //if (printDebug) {
+        if (true) {
             BoreEncoderVal=throughBoreEncoder.getRaw();
             System.out.println("ForwardLimitPosition BoreEncoderVal End = "+BoreEncoderVal);
         }
+
+        armPosition = ArmPosition.FORWARD_LIMIT;
+
     }
 
     /* Sets arm to upright position which is for start of game */
@@ -240,10 +252,6 @@ public class ArmSubsystem extends SubsystemBase {
             System.out.println("SpeakerShooterPosition");
         }
 
-        // This is the setting for moving arm upward
-        talonMotorLeft.setInverted(false);
-        talonMotorRight.setInverted(true);
-
         BoreEncoderVal=throughBoreEncoder.getRaw();
         if (printDebug) {
             System.out.println("SpeakerShooterPosition BoreEncoderVal Start = "+BoreEncoderVal);
@@ -294,10 +302,6 @@ public class ArmSubsystem extends SubsystemBase {
             System.out.println("AmpShooterPosition");
         }
 
-        // This is the setting for moving arm upward
-        talonMotorLeft.setInverted(false);
-        talonMotorRight.setInverted(true);
-
         BoreEncoderVal=throughBoreEncoder.getRaw();
         if (printDebug) {
             System.out.println("AmpShooterPosition BoreEncoderVal Start = "+BoreEncoderVal);
@@ -345,10 +349,6 @@ public class ArmSubsystem extends SubsystemBase {
         if (printDebug) {
             System.out.println("HangPosition");
         }
-
-        // This is the setting for moving arm downward
-        talonMotorLeft.setInverted(true);
-        talonMotorRight.setInverted(false);
 
         BoreEncoderVal=throughBoreEncoder.getRaw();
         if (printDebug) {

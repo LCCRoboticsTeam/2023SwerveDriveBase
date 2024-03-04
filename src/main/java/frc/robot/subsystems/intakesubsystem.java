@@ -40,7 +40,7 @@ public class IntakeSubsystem extends SubsystemBase {
         int BoreEncoderVal;
 
         //talonMotor.setInverted(false);
-        talonMotor.set(speed);
+        talonMotor.set(-speed);
 
         //BoreEncoderVal=throughBoreEncoder.getRate();
         //if (printDebug) {
@@ -52,7 +52,7 @@ public class IntakeSubsystem extends SubsystemBase {
     /* Sets intake to spit out game piece */
     public void intakeOut() {
         //talonMotor.setInverted(true);
-        talonMotor.set(-speed);
+        talonMotor.set(speed);
 
     }
 
