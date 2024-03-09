@@ -54,7 +54,8 @@ public static final class IntakeConstants {
 }
 
 public static final class ShooterConstants {
-  public static final double SHOOTER_MOTOR_SPEED = 0.4;
+  public static final double SHOOTER_MOTOR_SPEED = 0.3;
+  public static final double SHOOTER_HIGH_SPEED_MULTIPLIER = 2;
   public static final int SHOOTER_MOTOR_LEFT_CAN_ID = 5; 
   public static final int SHOOTER_MOTOR_RIGHT_CAN_ID = 9; 
 }

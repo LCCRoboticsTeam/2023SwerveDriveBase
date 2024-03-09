@@ -6,6 +6,8 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 
+import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.ArmPosition;
 import frc.robot.subsystems.ShooterSubsystem;
 
 import java.util.function.DoubleSupplier;
@@ -21,10 +23,14 @@ public class ShooterSubsystemCommand extends CommandBase {
   private final BooleanSupplier ShooterOut;
   private final boolean ShooterOutOnly;
   private final boolean printDebugInput;
+
+  private final ArmPosition armPosition;
+
   
   /** Creates a new SwerveControllerDrive. */
-  public ShooterSubsystemCommand(ShooterSubsystem ShooterSubsystem, BooleanSupplier ShooterOut, BooleanSupplier ShooterIn, boolean ShooterOutOnly, boolean printDebugInput) {
+  public ShooterSubsystemCommand(ShooterSubsystem ShooterSubsystem, ArmPosition armPosition, BooleanSupplier ShooterOut, BooleanSupplier ShooterIn, boolean ShooterOutOnly, boolean printDebugInput) {
     this.ShooterSubsystem = ShooterSubsystem;
+    this.armPosition = armPosition;
     this.ShooterOut = ShooterOut;
     this.ShooterIn = ShooterIn;
     this.ShooterOutOnly = ShooterOutOnly;
@@ -44,7 +50,10 @@ public class ShooterSubsystemCommand extends CommandBase {
   public void execute() {
   
     if (ShooterOut.getAsBoolean()){
-      ShooterSubsystem.ShooterOut();
+      if (armPosition==ArmPosition.SPEAKER_SHOOTER)
+        ShooterSubsystem.ShooterOut(true);
+      else
+        ShooterSubsystem.ShooterOut(false);
     } 
     else {
       if ((!ShooterOutOnly) && (ShooterIn.getAsBoolean())) {

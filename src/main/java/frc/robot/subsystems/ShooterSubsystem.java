@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Encoder;
 
 import frc.robot.Robot;
+import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
    
@@ -24,9 +25,9 @@ public class ShooterSubsystem extends SubsystemBase {
         printDebug = printDebugInput;
 
         talonMotorLeft = new WPI_TalonSRX(motorIDInputLeft);
-        talonMotorLeft.setInverted(true);        
+        talonMotorLeft.setInverted(false);        
         talonMotorRight = new WPI_TalonSRX(motorIDInputRight);
-        talonMotorRight.setInverted(true);  
+        talonMotorRight.setInverted(false);  
 
         if (printDebug) {
             System.out.println("ShooterSubsystem: MotorID constructor ");
@@ -38,22 +39,27 @@ public class ShooterSubsystem extends SubsystemBase {
         //talonMotorLeft.setInverted(true);
         //talonMotorRight.setInverted(true);
 
-        talonMotorLeft.set(speed);
-        talonMotorRight.set(speed);
+        talonMotorLeft.set(-speed);
+        talonMotorRight.set(-speed);
 
     }
 
     /* Sets Shooter to send game piece */
-    public void ShooterOut() {
+    public void ShooterOut(boolean highspeed) {
         int BoreEncoderValLeft;
         int BoreEncoderValRight;
-
 
         //talonMotorLeft.setInverted(false);
         //talonMotorRight.setInverted(false);
 
-        talonMotorLeft.set(-speed);
-        talonMotorRight.set(-speed);
+        if (highspeed) {
+            talonMotorLeft.set(speed*ShooterConstants.SHOOTER_HIGH_SPEED_MULTIPLIER);
+            talonMotorRight.set(speed*ShooterConstants.SHOOTER_HIGH_SPEED_MULTIPLIER);
+        }
+        else {
+          talonMotorLeft.set(speed);
+          talonMotorRight.set(speed);
+        }
 
         //BoreEncoderValLeft=throughBoreEncoderLeft.getRate();
         //BoreEncoderValRight=throughBoreEncoderRight.getRate()

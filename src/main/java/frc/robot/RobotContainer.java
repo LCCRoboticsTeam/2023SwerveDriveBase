@@ -62,7 +62,7 @@ public class RobotContainer {
   
     driveTrain.setDefaultCommand(new SwerveGamepadDriveCommand(driveTrain,commandXboxController::getLeftX, commandXboxController::getLeftY, commandXboxController::getRightX, fieldRelativeChooser::getSelected));
     inTake.setDefaultCommand(new IntakeSubsystemCommand(inTake, xboxController::getAButton, xboxController::getLeftBumper, true, false));
-    Shooter.setDefaultCommand(new ShooterSubsystemCommand(Shooter, xboxController::getBButton, xboxController::getRightBumper, true, false));
+    Shooter.setDefaultCommand(new ShooterSubsystemCommand(Shooter, Arm.armPosition, xboxController::getBButton, xboxController::getRightBumper, true, false));
     Arm.setDefaultCommand(new ArmSubsystemCommand(Arm, xboxController::getBackButton, xboxController::getStartButton, xboxController::getXButton, xboxController::getYButton, false));
   }
 
