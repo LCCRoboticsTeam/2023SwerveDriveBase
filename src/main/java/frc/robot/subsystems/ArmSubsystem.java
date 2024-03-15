@@ -20,6 +20,7 @@ public class ArmSubsystem extends SubsystemBase {
    
     private final WPI_TalonSRX talonMotorLeft;    
     private final WPI_TalonSRX talonMotorRight;   
+    //private final WPI_TalonSRX talonMotorCenter;
     private final Encoder throughBoreEncoder; 
     private double speed;
     private boolean printDebug;
@@ -33,6 +34,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         talonMotorLeft = new WPI_TalonSRX(motorIDInputLeft);
         talonMotorRight = new WPI_TalonSRX(motorIDInputRight);
+        //talonMotorCenter = new WPI_TalonSRX(motorIDInputCenter);
 
         // This is the setting for moving arm downward, which will happen when speed is greater than 0
         talonMotorLeft.setInverted(true);        
@@ -40,6 +42,7 @@ public class ArmSubsystem extends SubsystemBase {
         
         talonMotorRight.setNeutralMode(NeutralMode.Brake);
         talonMotorLeft.setNeutralMode(NeutralMode.Brake);
+        //talonMotorCenter.setNeutralMode(NeutralMode.Brake);
         
         // Initializes an encoder on DIO pins 0 and 1
         // 2X encoding and inverted
